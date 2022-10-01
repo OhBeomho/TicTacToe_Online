@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tic Tac Toe Online</title>
+		<style>
+			* {
+				font-family: 'Segoe UI Light';
+			}
+
+			html,
+			body {
+				margin: 0;
+			}
+
+			body {
+				height: 100vh;
+			}
+
+			body,
+			.room,
+			.wait,
+			.game {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.game,
+			.wait {
+				display: none;
+			}
+
+			table {
+				border: 1px solid black;
+				border-collapse: collapse;
+			}
+
+			td {
+				width: 100px;
+				height: 100px;
+				border: 2px solid black;
+				text-align: center;
+				font-weight: bold;
+				font-size: 25px;
+			}
+
+			input,
+			button {
+				margin: 3px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="room">
+			<h1>Tic Tac Toe <span style="color: rgb(0, 85, 255)">Online</span></h1>
+			<input type="text" id="input_room_name" placeholder="Enter room name..." style="font-size: 18px" /><br />
+			<button id="button_create">Create Room</button><button id="button_join">Join Room</button>
+		</div>
+		<div class="wait">
+			<h1>Waiting...</h1>
+			<h3 style="color: gray">Waiting for other player</h3>
+		</div>
+		<div class="game">
+			<h2 id="turn"></h2>
+			<table id="board"></table>
+		</div>
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="./tictactoe.js"></script>
+	</body>
+</html>
