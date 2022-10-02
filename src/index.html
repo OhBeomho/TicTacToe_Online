@@ -46,6 +46,7 @@
 				text-align: center;
 				font-weight: bold;
 				font-size: 25px;
+				transition: background-color 0.2s;
 			}
 
 			input,
@@ -67,6 +68,9 @@
 		<div class="game">
 			<h2 id="turn"></h2>
 			<table id="board"></table>
+		</div>
+		<div style="position: absolute; bottom: 0; right: 0; padding: 3px">
+			Source on <a href="https://github.com/OhBeomho/TicTacToe_Online">Github</a>.
 		</div>
 
 		<script src="/socket.io/socket.io.js"></script>

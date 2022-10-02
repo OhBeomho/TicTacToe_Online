@@ -14,7 +14,6 @@ const tds = []
 
 for (let i = 0; i < 3; i++) {
 	const tr = document.createElement('tr')
-	tds.push([])
 
 	for (let j = 0; j < 3; j++) {
 		const td = document.createElement('td')
@@ -24,7 +23,7 @@ for (let i = 0; i < 3; i++) {
 			socket.emit('tictactoe', { x: j, y: i, num })
 		})
 
-		tds[i].push(td)
+		tds.push(td)
 		tr.appendChild(td)
 	}
 
@@ -44,8 +43,8 @@ function room(room_name, type) {
 }
 
 function mark(x, y, num) {
-	tds[y][x].innerText = num === 1 ? 'O' : 'X'
-	tds[y][x].className = 'marked'
+	tds[y * 3 + x].innerText = num === 1 ? 'O' : 'X'
+	tds[y * 3 + x].style.backgroundColor = 'lightgray'
 }
 
 function waitGame() {
@@ -61,12 +60,16 @@ function startGame() {
 	else turn.innerText = `Opponent's turn`
 }
 
-function win(win_num, gg = false) {
+function win(win_num, highlight, gg = false) {
 	socket.removeAllListeners('tictactoe')
 
 	if (win_num === -1) turn.innerText = 'Tie!'
 	else if (!gg) turn.innerText = win_num === num ? 'You win!' : 'You lost..'
 	else turn.innerText = 'You win! (Opponent left)'
+
+	const color = win_num === 1 ? 'blue' : 'red'
+
+	for (let i of highlight) tds[i].style.backgroundColor = color
 
 	const main_button = document.createElement('button')
 	main_button.addEventListener('click', () => location.reload())
@@ -84,9 +87,8 @@ socket.on('room', (data) => {
 	} else if (data.type === 'start') startGame()
 })
 socket.on('tictactoe', (data) => {
-	console.log(data.winner)
-	if (data.winner) return win(data.winner)
-	else if (data.gg) return win(num, true)
+	if (data.winner) return win(data.winner, data.highlight)
+	else if (data.gg) return win(num, [], true)
 
 	mark(data.x, data.y, data.num)
 	my_turn = !(data.num === num)

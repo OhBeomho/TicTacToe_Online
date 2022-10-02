@@ -74,9 +74,9 @@ io.on('connection', (socket) => {
 		room.board[data.y][data.x] = data.num
 		io.to(room.room_name).emit('tictactoe', data)
 
-		const check_winner = check(room.board) === data.num
-		if (check_winner || check(room.board) === -1) {
-			io.to(room.room_name).emit('tictactoe', { winner: check_winner ? data.num : -1 })
+		const win_data = check(room.board)
+		if (win_data[0] === data.num || win_data[0] === -1) {
+			io.to(room.room_name).emit('tictactoe', { winner: win_data[0], highlight: win_data[1] })
 			room_list.splice(room_list.indexOf(room), 1)
 			room.clients.forEach((e) => e.leave(room.room_name))
 			return
@@ -91,18 +91,18 @@ io.on('connection', (socket) => {
 
 	const check = (board) => {
 		for (let i = 0; i < board.length; i++) {
-			if (board[i].every((e) => e === board[i][0]) && board[i][0]) return board[i][0]
-			else if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[i][0]) return board[0][i]
+			if (board[i].every((e) => e === board[i][0]) && board[i][0]) return [board[i][0], [i * 3, i * 3 + 1, i * 3 + 2]]
+			else if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[i][0]) return [board[0][i], [i, 3 + i, 6 + i]]
 		}
 
-		if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0]) return board[0][0]
-		else if (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[0][2]) return board[0][2]
+		if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0]) return [board[0][0], [0, 4, 8]]
+		else if (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[0][2]) return [board[0][2], [2, 4, 6]]
 
 		for (let i = 0; i < board.length; i++) {
 			if (board[i].find((e) => e === 0) !== undefined) return 0
 		}
 
-		return -1
+		return [-1, null]
 	}
 })
 
