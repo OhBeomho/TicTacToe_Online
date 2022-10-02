@@ -92,7 +92,7 @@ io.on('connection', (socket) => {
 	const check = (board) => {
 		for (let i = 0; i < board.length; i++) {
 			if (board[i].every((e) => e === board[i][0]) && board[i][0]) return [board[i][0], [i * 3, i * 3 + 1, i * 3 + 2]]
-			else if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[i][0]) return [board[0][i], [i, 3 + i, 6 + i]]
+			else if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[0][i]) return [board[0][i], [i, 3 + i, 6 + i]]
 		}
 
 		if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0]) return [board[0][0], [0, 4, 8]]
