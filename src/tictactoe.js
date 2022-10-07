@@ -47,9 +47,11 @@ function mark(x, y, num) {
 	tds[y * 3 + x].style.backgroundColor = 'lightgray'
 }
 
-function waitGame() {
+function waitGame(room_name) {
 	document.querySelector('.room').style.display = 'none'
 	document.querySelector('.wait').style.display = 'flex'
+
+	document.getElementById('room_name').innerText = 'Room name: ' + room_name
 }
 
 function startGame() {
@@ -67,20 +69,19 @@ function win(win_num, highlight, gg = false) {
 	else if (!gg) turn.innerText = win_num === num ? 'You win!' : 'You lost..'
 	else turn.innerText = 'You win! (Opponent left)'
 
-	const color = win_num === 1 ? 'blue' : 'red'
-
-	for (let i of highlight) tds[i].style.backgroundColor = color
-
 	const main_button = document.createElement('button')
 	main_button.addEventListener('click', () => location.reload())
 	main_button.innerText = 'Go to main page'
 	document.querySelector('.game').appendChild(main_button)
+
+	const color = win_num === 1 ? 'blue' : 'red'
+	for (let i of highlight) tds[i].style.backgroundColor = color
 }
 
 socket.on('room', (data) => {
 	if (data.type === 'error') alert(data.message)
 	else if (data.type === 'created' || data.type === 'joined') {
-		waitGame()
+		waitGame(data.room_name)
 
 		if (data.type === 'created') my_turn = true
 		else if (data.type === 'joined') num = 2

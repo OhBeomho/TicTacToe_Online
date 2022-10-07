@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
 			room_list.push(new_room)
 			socket.join(room_name)
 
-			socket.emit('room', { type: 'created' })
+			socket.emit('room', { type: 'created', room_name })
 		} else if (type === 'join') {
 			const target_room = room_list.find((e) => e.room_name === room_name)
 
@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
 			room = target_room
 			room.clients.push(socket)
 
-			socket.emit('room', { type: 'joined' })
+			socket.emit('room', { type: 'joined', room_name })
 			if (room.clients.length === 2) io.to(room_name).emit('room', { type: 'start' })
 		}
 	})
